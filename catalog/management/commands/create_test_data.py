@@ -22,13 +22,48 @@ class Command(BaseCommand):
         # 3. Создаём продукты
         self.stdout.write("Создание продуктов...")
         products_data = [
-            {"name": "Ноутбук", "price": 60000, "category": electronics, "description": "Мощный ноутбук для работы"},
-            {"name": "Смартфон", "price": 30000, "category": electronics, "description": "Современный смартфон с отличной камерой"},
-            {"name": "Наушники", "price": 5000, "category": electronics, "description": "Беспроводные наушники"},
-            {"name": "Python для начинающих", "price": 1500, "category": books, "description": "Книга по Python"},
-            {"name": "Django для профи", "price": 2000, "category": books, "description": "Продвинутый Django"},
-            {"name": "Футболка", "price": 1200, "category": clothes, "description": "Хлопковая футболка"},
-            {"name": "Джинсы", "price": 3500, "category": clothes, "description": "Удобные джинсы"},
+            {
+                "name": "Ноутбук",
+                "price": 60000,
+                "category": electronics,
+                "description": "Мощный ноутбук для работы",
+            },
+            {
+                "name": "Смартфон",
+                "price": 30000,
+                "category": electronics,
+                "description": "Современный смартфон с отличной камерой",
+            },
+            {
+                "name": "Наушники",
+                "price": 5000,
+                "category": electronics,
+                "description": "Беспроводные наушники",
+            },
+            {
+                "name": "Python для начинающих",
+                "price": 1500,
+                "category": books,
+                "description": "Книга по Python",
+            },
+            {
+                "name": "Django для профи",
+                "price": 2000,
+                "category": books,
+                "description": "Продвинутый Django",
+            },
+            {
+                "name": "Футболка",
+                "price": 1200,
+                "category": clothes,
+                "description": "Хлопковая футболка",
+            },
+            {
+                "name": "Джинсы",
+                "price": 3500,
+                "category": clothes,
+                "description": "Удобные джинсы",
+            },
         ]
 
         for product in products_data:
@@ -38,7 +73,9 @@ class Command(BaseCommand):
                 category=product["category"],
                 description=product["description"],
             )
-        self.stdout.write(self.style.SUCCESS(f"✓ Создано {len(products_data)} продуктов"))
+        self.stdout.write(
+            self.style.SUCCESS(f"✓ Создано {len(products_data)} продуктов")
+        )
 
         # 4. Вывод итогов
         self.stdout.write("\n" + "=" * 50)
