@@ -1,16 +1,16 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Skystore</title>
-    <!-- Подключите статичеcкие файлы со стилями Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-
-<!-- Bootstrap Icons (опционально, для иконок) -->
+    <title>Skystore - Контакты</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
+
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
     <h5 class="my-0 mr-md-auto font-weight-normal">Skystore</h5>
     <nav class="ms-5">
@@ -24,8 +24,10 @@
 </div>
 
 <div class="container">
-    <div class="row text-start">
-        <div class="col-lg-9 col-md-6 col-sm-12">
+    <!-- ДОБАВЛЯЕМ ЭТУ СТРОКУ ДЛЯ ЦЕНТРИРОВАНИЯ -->
+    <div class="row justify-content-center">
+
+        <div class="col-lg-9 col-md-8 col-sm-12">
             <div class="card mb-4 box-shadow">
                 <div class="card-body">
                     <table class="table table-striped">
@@ -39,40 +41,44 @@
                         </tr>
                         <tr>
                             <td class="w-25">Адрес</td>
-                            <td>Redmond,WA,98052-6399</td>
+                            <td>Redmond, WA, 98052-6399</td>
                         </tr>
                     </table>
                 </div>
             </div>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-12">
+
+        <div class="col-lg-5 col-md-6 col-sm-12">
             <div class="card mb-4 box-shadow">
                 <div class="card-header">
                     <h4 class="my-0 font-weight-normal">Свяжитесь с нами</h4>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="" class="form-floating">
+                    <form method="post" action=".">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label for="name">Имя</label>
+                            <label for="name" class="form-label">Имя</label>
                             <input type="text" name="name" class="form-control" id="name" placeholder="Ваше имя" required>
                         </div>
                         <div class="mb-3">
-                            <label for="phone">Телефон</label>
+                            <label for="phone" class="form-label">Телефон</label>
                             <input type="text" name="phone" class="form-control" id="phone" placeholder="Контактный телефон" required>
                         </div>
                         <div class="mb-3">
-                            <label for="message">Сообщение</label>
-                            <textarea type="text" name="message" class="form-control" id="message" placeholder="Контактный телефон" required></textarea>
+                            <label for="message" class="form-label">Сообщение</label>
+                            <textarea name="message" class="form-control" id="message" placeholder="Ваше сообщение" rows="4" required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-lg btn-block btn-outline-primary">Отправить</button>
+                        <button type="submit" class="btn btn-primary w-100">Отправить</button>
                     </form>
                 </div>
             </div>
         </div>
-    </div>
 
-    <footer class="pt-4 my-md-5 pt-md-5 border-top">
+    </div> <!-- Закрывает justify-content-center -->
+</div> <!-- Закрывает container -->
+
+<footer class="pt-4 my-md-5 pt-md-5 border-top">
+    <div class="container">
         <div class="row">
             <div class="col-12 col-md">
                 SkyStore
@@ -101,9 +107,10 @@
                 </ul>
             </div>
         </div>
-    </footer>
-</div>
+    </div>
+</footer>
 
-<!-- Подключите статичеcкие файлы со скриптами Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
