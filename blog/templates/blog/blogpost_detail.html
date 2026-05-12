@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Хлебные крошки -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'blog:list' %}">Блог</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ post.title|truncatewords:10 }}</li>
+        </ol>
+    </nav>
+
+    <!-- Заголовок и информация -->
+    <div class="mb-4">
+        <h1 class="display-5">{{ post.title }}</h1>
+        <div class="text-muted mt-2">
+            <span>📅 Опубликовано: {{ post.created_date|date:"d.m.Y в H:i" }}</span>
+            <span class="ms-3">👁️ Просмотров: {{ post.views_count }}</span>
+        </div>
+    </div>
+
+    <!-- Изображение -->
+    {% if post.preview %}
+    <div class="mb-4 text-center">
+        <img src="{{ post.preview.url }}" class="img-fluid rounded shadow-sm" alt="{{ post.title }}" style="max-height: 400px;">
+    </div>
+    {% endif %}
+
+    <!-- Содержимое -->
+    <div class="content mb-5">
+        <div class="card">
+            <div class="card-body">
+                {{ post.content|linebreaks }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Кнопки действий -->
+    <div class="mt-4">
+        <a href="{% url 'blog:update' post.pk %}" class="btn btn-warning">✏️ Редактировать</a>
+        <a href="{% url 'blog:delete' post.pk %}" class="btn btn-danger">🗑️ Удалить</a>
+        <a href="{% url 'blog:list' %}" class="btn btn-secondary">← Назад к списку</a>
+    </div>
+</div>
+{% endblock %}
