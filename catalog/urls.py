@@ -1,3 +1,5 @@
+from tkinter.font import names
+
 from django.urls import path
 
 from catalog import views
@@ -12,5 +14,8 @@ urlpatterns = [
     path("", HomeView.as_view(), name="home"),
     path("contacts/", ContactsView.as_view(), name="contacts"),
     path("products/", ProductListView.as_view(), name="product_list"),
-    path("products/<int:pk>/", ProductDetailView.as_view(), name="product_details" )
+    path("products/<int:pk>/", ProductDetailView.as_view(), name="product_details"),
+    path("product/create/", views.ProductCreateView.as_view(), name="product_create"),
+    path("product/<int:pk>/update", views.ProductUpdateView.as_view(), name="product_update"),
+    path("product/<int:pk>/delete", views.ProductDeleteView.as_view(), name="product_delete"),
 ]
