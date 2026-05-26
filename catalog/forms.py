@@ -11,7 +11,7 @@ FORBIDDEN_WORDS = ["казино", "криптовалюта", "крипта", "
 class ProductForm(ModelForm):
     class Meta:
         model = Product
-        fields = "__all__"
+        fields = ("name", "description", "photo", "category", "price")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -43,7 +43,7 @@ class ProductForm(ModelForm):
             for word in FORBIDDEN_WORDS:
                 if word in name_lower:
                     raise forms.ValidationError(f"Название содержит запрещенное слово: {word} ")
-                return name
+        return name
 
     def clean_description(self):
         description = self.cleaned_data.get("description")
