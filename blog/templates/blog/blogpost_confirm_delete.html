@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Удаление записи{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">⚠️ Подтверждение удаления</h3>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        {% if post.preview %}
+                        <img src="{{ post.preview.url }}" alt="{{ post.title }}" style="max-height: 150px; border-radius: 8px;">
+                        {% endif %}
+                    </div>
+
+                    <h4>Вы уверены, что хотите удалить запись?</h4>
+                    <p class="lead"><strong>"{{ object.title }}"</strong></p>
+
+                    <div class="alert alert-danger">
+                        <strong>Внимание!</strong> Это действие необратимо. Все данные будут потеряны.
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-center gap-3">
+                            <button type="submit" class="btn btn-danger btn-lg">
+                                ✅ Да, удалить
+                            </button>
+                            <a href="{% url 'blog:detail' object.pk %}" class="btn btn-secondary btn-lg">
+                                ❌ Отмена
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
