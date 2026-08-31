@@ -10,10 +10,25 @@ class User(AbstractUser):
         verbose_name="Телефон",
         blank=True,
         null=True,
-        help_text="Введите номер телефона в международном формате"
+        help_text="Введите номер телефона в международном формате",
     )
-    avatar = models.ImageField(upload_to="users/avatars/", verbose_name="Фотография", blank=True, null=True, help_text="Загрузите вашу фотографию")
-    country = models.CharField(max_length=20, verbose_name="Страна", blank=True, null=True, help_text="Укажите вашу страну")
+    avatar = models.ImageField(
+        upload_to="users/avatars/",
+        verbose_name="Фотография",
+        blank=True,
+        null=True,
+        help_text="Загрузите вашу фотографию",
+    )
+    country = models.CharField(
+        max_length=20,
+        verbose_name="Страна",
+        blank=True,
+        null=True,
+        help_text="Укажите вашу страну",
+    )
+    token = models.CharField(
+        max_length=100, verbose_name="Token", blank=True, null=True
+    )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -24,5 +39,3 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
-
-

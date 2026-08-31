@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 
-from django.conf.global_settings import AUTH_USER_MODEL
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -28,7 +27,7 @@ INSTALLED_APPS = [
     "catalog",
     "blog",
     "users",
-    "phonenumber_field"
+    "phonenumber_field",
 ]
 
 MIDDLEWARE = [
@@ -110,3 +109,16 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 AUTH_USER_MODEL = "users.User"
+
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
+EMAIL_HOST = "smtp.yandex.ru"
+EMAIL_PORT = 465
+EMAIL_HOST_USER = "m4liwka007@yandex.ru"
+EMAIL_HOST_PASSWORD = "gcdvyeoozguwyrbd"
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
