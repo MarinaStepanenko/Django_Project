@@ -3,10 +3,18 @@ from django.forms.widgets import CheckboxInput, Select
 
 from catalog.models import Product
 
-FORBIDDEN_WORDS = ["казино", "криптовалюта", "крипта", "биржа",
-    "дешево", "бесплатно", "обман", "полиция", "радар"
-
+FORBIDDEN_WORDS = [
+    "казино",
+    "криптовалюта",
+    "крипта",
+    "биржа",
+    "дешево",
+    "бесплатно",
+    "обман",
+    "полиция",
+    "радар",
 ]
+
 
 class ProductForm(ModelForm):
     class Meta:
@@ -42,16 +50,20 @@ class ProductForm(ModelForm):
             name_lower = name.lower()
             for word in FORBIDDEN_WORDS:
                 if word in name_lower:
-                    raise forms.ValidationError(f"Название содержит запрещенное слово: {word} ")
+                    raise forms.ValidationError(
+                        f"Название содержит запрещенное слово: {word} "
+                    )
         return name
 
     def clean_description(self):
         description = self.cleaned_data.get("description")
         if description:
-          desc_lower = description.lower()
-          for word in FORBIDDEN_WORDS:
-              if word in desc_lower:
-                  raise forms.ValidationError(f"Описание содержит запрещенное слово: {word} ")
+            desc_lower = description.lower()
+            for word in FORBIDDEN_WORDS:
+                if word in desc_lower:
+                    raise forms.ValidationError(
+                        f"Описание содержит запрещенное слово: {word} "
+                    )
         return description
 
     def clean_price(self):
