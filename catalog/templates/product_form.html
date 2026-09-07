@@ -6,26 +6,38 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-
                     <h2>{% if object %}Редактировать товар{% else %}Создать товар{% endif %}</h2>
-
                 </div>
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
 
                         {% for field in form %}
-                        <div class="mb-3">
-                            <label for="{{ field.id_for_label }}" class="form-label">
-                                {{ field.label }}
-                            </label>
-                            {{ field }}
-                            {% if field.errors %}
-                            <div class="alert alert-danger mt-1">
-                                {{ field.errors }}
-                            </div>
+                            <!-- 👇 ПРОВЕРКА: поле is_published показываем ТОЛЬКО модераторам -->
+                            {% if field.name == 'is_published' %}
+                                {% if perms.catalog.can_unpublish_product %}
+                                    <div class="mb-3 form-check">
+                                        {{ field }}
+                                        <label class="form-check-label" for="{{ field.id_for_label }}">
+                                            {{ field.label }}
+                                        </label>
+                                        {% if field.errors %}
+                                            <div class="alert alert-danger mt-1">{{ field.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <!-- Остальные поля показываем всем -->
+                                <div class="mb-3">
+                                    <label for="{{ field.id_for_label }}" class="form-label">
+                                        {{ field.label }}
+                                    </label>
+                                    {{ field }}
+                                    {% if field.errors %}
+                                        <div class="alert alert-danger mt-1">{{ field.errors }}</div>
+                                    {% endif %}
+                                </div>
                             {% endif %}
-                        </div>
                         {% endfor %}
 
                         <button type="submit" class="btn btn-success">Сохранить</button>
