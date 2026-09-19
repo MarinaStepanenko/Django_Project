@@ -3,13 +3,22 @@
 {% block content %}
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
+        <div class="mb-4">
+            <h5>Категории:</h5>
+            {% for category in categories %}
+                <a href="{% url 'catalog:products_category' category.pk %}" class="btn btn-outline-primary btn-sm">
+                    {{ category.name }}
+                </a>
+            {% endfor %}
+        </div>
+
         {% if user.is_authenticated %}
             <div class="mb-3">
                 <a href="{% url 'catalog:product_create' %}" class="btn btn-success">Добавить товар</a>
             </div>
         {% endif %}
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            {% for product in object_list %}
+            {% for product in products %}
             <div class="col">
                 <div class="card shadow-sm">
                    {% if product.photo %}

@@ -27,13 +27,13 @@
 #    product = get_object_or_404(Product, pk=pk)
 #    context = {"product": product}
 #    return render(request, "product_detail.html", context)
-
 from pyexpat.errors import messages
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin,
                                         UserPassesTestMixin)
+from django.core import cache
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -41,7 +41,8 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   TemplateView, UpdateView)
 
 from catalog.forms import ProductForm
-from catalog.models import Product
+from catalog.models import Category, Product
+from catalog.services import get_products_by_category
 
 
 class HomeView(TemplateView):
@@ -56,6 +57,26 @@ class ProductListView(ListView):
     model = Product
     template_name = "catalog/product_list.html"
     context_object_name = "products"
+
+    def get_queryset(self):
+        # 👇 Пробуем получить данные из кеша
+        products = cache.get("products_list")
+
+        if products is None:
+            # Если в кеше нет — идем в базу данных
+            products = Product.objects.filter(is_published=True)
+            # 👇 Сохраняем в кеш на 15 минут (900 секунд)
+            cache.set("products_list", products, 60 * 15)
+            print("🔵 Данные загружены из БД и сохранены в кеш")
+        else:
+            print("🟢 Данные загружены из кеша")
+
+        return products
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()  # 👈 Передаем категории
+        return context
 
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
@@ -74,6 +95,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         product = form.save(commit=False)
         product.owner = self.request.user
         product.save()
+        cache.delete("products_list")
         return super().form_valid(form)
 
 
@@ -103,6 +125,7 @@ class ProductUpdateView(
                 return self.form_invalid(form)
 
         product.save()
+        cache.delete("products_list")
         return super().form_valid(form)
 
 
@@ -134,6 +157,11 @@ class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         """Если пользователь не владелец и не модератор"""
         raise PermissionDenied("У вас нет права удалять этот продукт.")
 
+    def form_valid(self, form):
+        # Сбрасываем кеш ПЕРЕД удалением
+        cache.delete("products_list")
+        return super().form_valid(form)
+
 
 @login_required
 @permission_required("catalog.can_unpublish_product", raise_exception=True)
@@ -145,6 +173,24 @@ def unpublish_product(request, pk):
         return redirect("catalog:product_list")
     product.is_published = False
     product.save()
-
+    cache.delete("products_list")
     messages.success(request, f"Продукт {product.name} снят с публикации")
     return redirect("catalog:product_list")
+
+
+class CategoryProductsView(
+    LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin, UpdateView
+):
+    model = Product
+    template_name = "catalog/product_category.html"
+    context_object_name = "products_category"
+
+    def get_queryset(self):
+        self.category = get_object_or_404(Category, pk=self.kwargs["pk"])
+
+        return get_products_by_category(self.category)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["category"] = self.category
+        return context
