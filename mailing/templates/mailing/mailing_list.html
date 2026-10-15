@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="album py-5 bg-body-tertiary">
+    <div class="container">
+        {% if user.is_authenticated %}
+            <div class="mb-3">
+                <a href="{% url 'mailing:mailing_create' %}" class="btn btn-success">Добавить рассылку</a>
+            </div>
+        {% endif %}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {% for mailing in mailings %}
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <!-- Время начала рассылки -->
+                        <p class="card-text fw-bold">{{ mailing.start_time|date:"d.m.Y H:i" }}</p>
+                        <!-- Время окончания рассылки -->
+                        <p class="card-text fw-bold">{{ mailing.end_time|date:"d.m.Y H:i" }}</p>
+                        <!-- Статус -->
+                        <p class="card-text text-muted">
+                            {% if mailing.status == "Создана" %}
+                            <span class="badge bg-secondary">{{ mailing.status }}</span>
+                            {% elif mailing.status == "Запущена" %}
+                            <span class="badge bg-success">{{ mailing.status }}</span>
+                            {% else %}
+                            <span class="badge bg-danger">{{ mailing.status }}</span>
+                            {% endif %}
+                        </p>
+                      <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a class="btn btn-primary" href="{% url 'mailing:mailing_detail' mailing.pk %}" role="button">Подробнее</a>
+                                    <a class="btn btn-warning" href="{% url 'mailing:mailing_update' mailing.pk %}" role="button">Редактировать</a>
+                                    <a class="btn btn-danger" href="{% url 'mailing:mailing_delete' mailing.pk %}" role="button">Удалить</a>
+                            </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

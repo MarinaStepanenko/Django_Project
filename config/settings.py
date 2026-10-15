@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "blog",
     "users",
     "phonenumber_field",
+    "mailing",
 ]
 
 MIDDLEWARE = [
@@ -122,6 +123,7 @@ EMAIL_USE_SSL = True
 
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 CACHE_ENABLED = True
 if CACHE_ENABLED:
@@ -135,3 +137,8 @@ if CACHE_ENABLED:
             },
         }
     }
+
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+
+
+LOGIN_URL = "/users/login/"

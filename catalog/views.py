@@ -37,16 +37,33 @@ from django.core import cache
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   TemplateView, UpdateView)
 
 from catalog.forms import ProductForm
 from catalog.models import Category, Product
 from catalog.services import get_products_by_category
+from mailing.models import Mailing, Recipient
 
 
 class HomeView(TemplateView):
     template_name = "home.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        now = timezone.now()
+
+        context["total_mailings"] = Mailing.objects.count()
+
+        context["active_mailings"] = Mailing.objects.filter(
+            start_time__lte=now, end_time__gte=now, status="Запущена"
+        ).count()
+
+        context["total_recipients"] = Recipient.objects.count()
+
+        return context
 
 
 class ContactsView(TemplateView):
