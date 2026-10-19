@@ -70,9 +70,9 @@ class ProductForm(ModelForm):
         price = self.cleaned_data.get("price")
 
         if price is None:
-            raise forms.ValidationError(f"Поле 'Цена' обязательно для заполнения")
+            raise forms.ValidationError("Поле 'Цена' обязательно для заполнения")
 
         if price < 0:
-            raise forms.ValidationError(f"'Цена' не может быть отрицательной")
+            raise forms.ValidationError("'Цена' не может быть отрицательной")
 
         return price

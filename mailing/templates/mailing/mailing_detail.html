@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h2>📨 Рассылка #{{ mailing.pk }}</h2>
+                    </div>
+                        <!-- ФИО получателя -->
+                        <div class="card-body">
+                        <h2>Дата начала рассылки: {{ mailing.start_time|date:"d.m.Y H:i" }}</h2>
+                       <h2>Дата окончания рассылки: {{ mailing.end_time|date:"d.m.Y H:i" }}</h2>
+                      <h2>Статус: {{ mailing.status }}</h2>
+
+                        <!-- Почта -->
+                            <p><strong>Сообщение: </strong>{{ mailing.message.subject }}</p>
+                        <!-- комментарий (обрезано до 100 символов) -->
+                            <p><strong>Получатели:</strong></p>
+                            <ul>
+                                {% for recipient in mailing.recipients.all %}
+                                    <li>{{ recipient.full_name }} ({{ recipient.email }})</li>
+                                {% empty %}
+                                    <li>Получатели не выбраны</li>
+                                {% endfor %}
+                            </ul>
+
+                    <h2>История попыток:</h2>
+                    {% if mailing.attempts.all %}
+                        <ul>
+                            {% for attempt in mailing.attempts.all %}
+                            <li>
+                                {{ attempt.attempt_time|date:"d.m.Y H:i" }} -
+                                {% if attempt.status == "Успешно" %}
+                                <span class="badge bg-success">{{ attempt.status }}</span>
+                                {% else %}
+                                <span class="badge bg-danger">{{attempt.status }}</span>
+                                {% endif %}
+                                <small class="text-muted">{{ attempt.server_response }}</small>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                    <p class="text-muted">Попыток ещё не было</p>
+                    {% endif %}
+                     </div>
+                    <div class="card-footer">
+                        <div class="btn-group">
+                            <form method="post" action="{% url 'mailing:mailing_send' mailing.pk %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success"> Запустить рассылку</button>
+                            </form>
+                                    <a class="btn btn-warning" href="{% url 'mailing:mailing_update' mailing.pk %}" role="button">Редактировать</a>
+                                    <a class="btn btn-danger" href="{% url 'mailing:mailing_delete' mailing.pk %}" role="button">Удалить</a>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+{% endblock %}

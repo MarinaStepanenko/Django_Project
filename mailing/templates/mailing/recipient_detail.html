@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <!-- ФИО получателя -->
+                        <h2>ФИО: {{ recipient.full_name }}</h2>
+                    </div>
+                        <!-- Почта -->
+                    <div class="card-body">
+                            <p><strong>Почта: </strong>{{ recipient.email }}</p>
+                        <!-- комментарий (обрезано до 100 символов) -->
+                            <p><strong>Комментарий: </strong>{{ recipient.comment|truncatechars:100 }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="btn-group">
+                                    <a class="btn btn-warning" href="{% url 'mailing:update' recipient.pk %}" role="button">Редактировать</a>
+                                    <a class="btn btn-danger" href="{% url 'mailing:delete' recipient.pk %}" role="button">Удалить</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
